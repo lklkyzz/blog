@@ -28,27 +28,24 @@ class Comment extends CI_Controller {
         }
 
         $result = $commentM->getCommentList($page, $size, $status, $uid);
-        if($result) {
-            success_return();
-        }else {
-            db_error();
-        }
+        pagination($result['count'], $result['commentsList']);
     }
 
     /**
-    * 审核评论
+    * 审核与删除评论
     */
-    public function deleteComment() {
+    public function checkcomment() {
         $this->load->model('Comments_model');
         $commentM = new Comments_model();
 
         $cmtid = $this->input->post('cmtid');
-        $status = $this->input->post('status');
-        if(!isset($cmtid) || !isset($status)) {
+        $pid = $this->input->post('pid');
+        $status = $this->input->post('status');//1通过，0删除
+        if(!isset($cmtid) || !isset($pid) || !isset($status)) {
             miss_params();
         }
 
-        $result = $commentM->checkComment($cmtid, $status);
+        $result = $commentM->checkComments($cmtid, $pid, $status);
         if($result) {
             success_return();
         }else {
@@ -59,7 +56,7 @@ class Comment extends CI_Controller {
     /**
     * 回复评论
     */
-    public function replycomment() {
+    public function writecomment() {
         $this->load->model('Comments_model');
         $commentM = new Comments_model();
 
@@ -67,11 +64,11 @@ class Comment extends CI_Controller {
         $uid = $this->input->post('uid');
         $toUid = $this->input->post('to_uid');
         $content = $this->input->post('content');
-        if(!isset($pid) || !isset($uid) || !isset($toUid) || $content) {
+        if(!isset($pid) || !isset($uid) || !isset($toUid) || !isset($content)) {
             miss_params();
         }
 
-        $result = $commentM->replyComment($pid, $uid, $toUid, $content);
+        $result = $commentM->writeComment($pid, $uid, $toUid, $content);
         if($result) {
             success_return();
         }else {

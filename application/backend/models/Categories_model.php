@@ -10,10 +10,11 @@ class Categories_model extends CI_model {
     /**
     * 文章分类下拉列表
     */
-    public function categoryDropDownList() {
+    public function categoryDropDownList($cid) {
         $this->db->select('cid, name');
         $this->db->from('categories');
         $this->db->where('status !=', 0);
+        $this->db->where('pcid', $cid);
         $result = $this->db->get()->result_array();
 
         return $result;
@@ -45,7 +46,7 @@ class Categories_model extends CI_model {
     public function getCategoryList($page, $size) {
         $page = $page - 1;
 
-        $this->db->select('c1.cid, c1.name, c2.name as parent_name, c1.status, c1.count, c1.created, c1.updated');
+        $this->db->select('c1.cid, c1.name, c2.name as parent_name, c1.status, c1.created, c1.updated');
         $this->db->from('categories c1');
         $this->db->join('categories c2', 'c1.pcid=c2.cid', 'left');
         $this->db->where('c1.status !=', 0);

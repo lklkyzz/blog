@@ -24,9 +24,9 @@ class Post extends CI_Controller {
     }
 
     /**
-    * 获取文章列表bystatus
+    * 获取文章列表
     */
-    public function getpostbystatus() {
+    public function postlist() {
         $this->load->model('Posts_model');
         $postM = new Posts_model();
 
@@ -40,7 +40,7 @@ class Post extends CI_Controller {
             miss_params();
         }
 
-        $result = $postM->getPostsByStatus($page, $size, $status, $cid);
+        $result = $postM->getPostsList($page, $size, $status, $cid);
         pagination($result['count'], $result['postsList']);
     }
 
@@ -83,8 +83,8 @@ class Post extends CI_Controller {
             miss_params();
         }
 
-        $checkPost = $postM->checkName($pid, $name);
-        if ($checkName) {
+        $checkPost = $postM->checkName($pid, $title);
+        if ($checkPost) {
             db_exist();
         }
 
@@ -114,8 +114,8 @@ class Post extends CI_Controller {
             miss_params();
         }
 
-        $checkPost = $postM->checkName($pid = null, $name);
-        if ($checkName) {
+        $checkPost = $postM->checkName($pid = null, $title);
+        if ($checkPost) {
             db_exist();
         }
 
@@ -128,13 +128,18 @@ class Post extends CI_Controller {
     }
 
     /**
-    * 文章分类下拉列表
+    * 分类下拉列表
     */
     public function categorydropdownlist() {
         $this->load->model('Categories_model');
         $categoryM = new Categories_model();
 
-        $result = $categoryM->categoryDropDownList();
+        $cid = $this->input->post('cid');//cid为0显示pcid为0的一级分类列表
+        if(!isset($cid)) {
+            miss_params();
+        }
+
+        $result = $categoryM->categoryDropDownList($cid);
         $count = count($result);
         pagination($count, $result);
     }

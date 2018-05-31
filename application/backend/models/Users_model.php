@@ -75,7 +75,7 @@ class Users_model extends CI_model {
     /**
     * 编辑用户
     */
-    public function updateUser($uid, $nickName, $pwd, $email, $sex, $avatar, $status) {
+    public function updateUser($uid, $nickName, $pwd, $email, $sex, $avatarPath, $status) {
         $this->load->helper('password');
 
         $time = time();
@@ -87,7 +87,7 @@ class Users_model extends CI_model {
             'pwd_hash' => $pwdHash,
             'email' => $email,
             'sex' => $sex,
-            'avatar' => $avatar,
+            'avatar_path' => $avatarPath,
             'status' => $status,
             'updated' => $time
         );
@@ -104,7 +104,7 @@ class Users_model extends CI_model {
     /**
     * 添加用户
     **/
-    public function addUser($account, $nickName, $pwd, $email, $sex, $avatar, $status) {
+    public function addUser($account, $nickName, $pwd, $email, $sex, $avatarPath, $status) {
         $this->load->helper('password');
 
         $time =time();
@@ -117,7 +117,7 @@ class Users_model extends CI_model {
             'pwd_hash' => $pwdHash,
             'email' => $email,
             'sex' => $sex,
-            'avatar' => $avatar,
+            'avatar_path' => $avatarPath,
             'status' => $status,
             'created' => $time,
             'updated' => $time
@@ -177,4 +177,14 @@ class Users_model extends CI_model {
         }
     }
 
+    /**
+    * 获取头像路径
+    **/
+    public function getAvatarPath($uid) {
+        $this->db->select('avatar_path');
+        $this->db->where('uid', $uid);
+        $picPath = $this->db->get('users')->result_array();
+
+        return $picPath[0]['avatar_path'];
+    }
 }

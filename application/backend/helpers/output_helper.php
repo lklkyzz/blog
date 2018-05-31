@@ -73,6 +73,30 @@ function length_error() {
     exit();
 }
 
+// 上传失败
+function upload_error($error) {
+    $ret = -9;
+    $msg = $error;
+    output_json($ret, $msg);
+    exit();
+}
+
+//验证md5失败
+function md5_file_error() {
+    $ret = -10;
+    $msg = 'md5 file check error';
+    output_json($ret, $msg);
+    exit();
+}
+
+//删除图片上败
+function delete_fail() {
+    $ret = -11;
+    $msg = 'delete fail';
+    output_json($ret, $msg);
+    exit();
+}
+
 // 分页返回
 function pagination($count, $data="") {
     $output = array(
